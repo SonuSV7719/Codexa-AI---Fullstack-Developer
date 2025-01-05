@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-bg-primary
+}
+
+.gutter {
+    background-color: #2d3748; /* Tailwind's gray-800 */
+  }
+  
+.gutter:hover {
+    background-color: #4a5568; /* Tailwind's gray-700 */
+  }
+  
+.gutter-horizontal {
+    cursor: col-resize;
+    width: 8px; /* Matches gutterSize */
+  }
+  
+.gutter-vertical {
+    cursor: row-resize;
+    height: 8px; /* Matches gutterSize */
+  }
+  
