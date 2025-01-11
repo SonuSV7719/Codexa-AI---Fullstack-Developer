@@ -14,6 +14,7 @@ import {
 import { useWebContainer } from '../hooks/useWebcontainer';
 import TerminalComponent from './TerminalComponent';
 import Spinner from './Spinner/Spinner';
+import { ChatMessage } from '../App';
 
 enum CodeTabs {
   CODE,
@@ -27,9 +28,11 @@ interface EditorContainerProps {
   files: FileSystemTree | null | undefined;
   commands: string[] | null;
   loading: boolean
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>
+  setAiCmdLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const EditorContainer: React.FC<EditorContainerProps> = ({ className, collapse, setCollapse, files, commands, loading }) => {
+const EditorContainer: React.FC<EditorContainerProps> = ({ className, collapse, setCollapse, files, commands, loading,setMessages,setAiCmdLoading }) => {
   const [activeTab, setActiveTab] = useState<CodeTabs>(CodeTabs.CODE);
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
   const [selectedFileContent, setSelectedFileContent] = useState<string>('');
@@ -176,7 +179,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({ className, collapse, 
                 <FaPlus />
               </div>
               {/* <div className="w-full h-[80vh] overflow-auto border-t border-gray-600 bg-bg-primary text-white"> */}
-                <TerminalComponent webContainerInstance={webContainerInstance} commandToExecute={command} />
+              <TerminalComponent webContainerInstance={webContainerInstance} commandToExecute={command} setMessages={setMessages} setAiCmdLoading={setAiCmdLoading}/>
               {/* </div> */}
             </div>
           </Split>

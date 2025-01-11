@@ -6,15 +6,15 @@ import 'primereact/resources/themes/saga-blue/theme.css'; // Theme
 import 'primereact/resources/primereact.min.css';        // Core CSS
 import 'primeicons/primeicons.css';                     // Icons
 import { WebContainerProvider } from './context/WebContainerContext.tsx';
-import GeminiAPI from './utils/GeminiApi.ts';
-
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const gemini = new GeminiAPI(GEMINI_API_KEY)
+// import GeminiAPI from './utils/GeminiApi.ts';
+import GeminiApiProvider from './context/GeminiApiProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <PrimeReactProvider value={{ unstyled: false }}>
     <WebContainerProvider >
-      <App gemini={gemini}/>
+      <GeminiApiProvider>
+        <App />
+      </GeminiApiProvider>
     </WebContainerProvider>
   </PrimeReactProvider>
 )

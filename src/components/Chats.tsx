@@ -1,24 +1,46 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react';
+import Spinner from './Spinner/Spinner';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ChatsProps {
-  messages: { sender: "user" | "AI"; text: string }[]; // Messages array
+  messages: { sender: "user" | "AI"; text: string, type: "chat" | 'shell' }[];
+  aiCmdLoading: boolean;
 }
 
-const Chats: React.FC<ChatsProps> = ({ messages }) => {
+const Chats: React.FC<ChatsProps> = ({ messages, aiCmdLoading }) => {
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const latestMessageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Scroll to the latest message whenever messages change
+    if (latestMessageRef.current) {
+      latestMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   if (!messages || messages.length === 0) return null;
 
   return (
-    <div className=' flex flex-col gap-5'>
+    <div
+      ref={chatContainerRef}
+      className="chat-container flex flex-col gap-5 overflow-y-auto"
+    >
       {messages.map((msg, index) => (
         <div
           key={index}
+          ref={index === messages.length - 1 ? latestMessageRef : null} // Add ref to the latest message
           className="chat-message p-4 rounded-lg border border-slate-500 bg-bg-secondary"
         >
           <div className="font-bold text-blue-500">
             {msg.sender === "user" ? "You:" : "AI:"}
           </div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore fugit unde accusantium corporis assumenda ipsam natus modi adipisci atque, distinctio tempore ullam, minus quidem, libero earum fuga eos. Eaque culpa possimus consectetur cupiditate illo facere ad deserunt perferendis. Laboriosam earum consequuntur accusamus adipisci dolore inventore impedit doloremque quam enim excepturi tempora obcaecati, illo, modi dolor quos. Numquam explicabo quo accusantium reiciendis dolorum nesciunt debitis at ipsum quibusdam est! Veritatis repudiandae magnam eligendi ducimus commodi beatae suscipit laborum deleniti! Eos omnis similique rem et iusto fuga, deleniti ad asperiores voluptatem natus provident veritatis officiis deserunt itaque dolorum velit eum? Alias amet, ducimus eius reiciendis eum commodi quia quibusdam accusamus illum quaerat, dicta facere dolores dolorem! Nulla eaque eligendi reprehenderit praesentium ut reiciendis eum minima mollitia? Aliquid, molestiae fugiat voluptatum doloremque velit, commodi repudiandae dolorem alias odio in facilis aliquam possimus. Perferendis veniam ipsam corporis quae vitae nobis consequatur nisi reprehenderit tempore ratione impedit eaque earum sint harum eveniet totam doloremque, dolorem soluta in. Dolorem obcaecati eius facere neque nisi rerum amet culpa, praesentium maxime, distinctio, consequatur hic est impedit debitis eaque necessitatibus accusantium blanditiis. Quos alias voluptatum rerum id quam harum quidem assumenda at exercitationem saepe. Perspiciatis porro ducimus ratione enim voluptatum nemo voluptatem facilis ex mollitia? Unde velit illo repellendus? Aliquid esse illum alias asperiores odit iure repellendus, harum vero inventore doloribus ullam, repudiandae, dignissimos eum natus. Asperiores, quisquam ipsa tempore deleniti voluptate iure quo autem blanditiis repellendus, nam eaque sed quam eos, facilis ipsum vero aperiam explicabo. Nulla neque, magni, veritatis unde nihil optio repellendus assumenda voluptate veniam a explicabo odio maxime et rerum dolore nobis consectetur, quisquam culpa. Impedit iure numquam iste deleniti assumenda nemo pariatur expedita velit. Est fuga voluptas exercitationem quis animi atque dolores minus dignissimos debitis nesciunt recusandae veritatis quaerat, doloremque aspernatur culpa aliquam impedit.
-          <p className="text-white">{msg.text}</p>
+          <div className="flex gap-3 items-center">
+            {aiCmdLoading && msg.type === "shell" && index === messages.length - 1 && (
+              <Spinner size="24px" />
+            )}
+            <Markdown remarkPlugins={[remarkGfm]}>{msg.text}</Markdown>
+          </div>
         </div>
       ))}
     </div>

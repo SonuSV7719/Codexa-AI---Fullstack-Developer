@@ -23,8 +23,7 @@ Available shell commands: cat, chmod, cp, echo, hostname, kill, ln, ls, mkdir, m
 
 <output_format> All outputs must follow this structure:
 
-markdown
-Copy code
+
 <codexaArtifact title="Descriptive Title Here" id="unique-id-here">
   <codexaAction type="file" filePath="path/to/file">
     File content goes here

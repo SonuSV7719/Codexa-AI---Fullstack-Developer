@@ -10,17 +10,21 @@ import { transformFiles, TransformFilesReturnType } from "./utils/create_file_js
 import { CiExport } from "react-icons/ci";
 import { DirectoryNode, FileNode, FileSystemTree } from "@webcontainer/api";
 import JSZip from "jszip";
+import { useGeminiApi } from "./hooks/useGeminiApi";
 
 interface AppProps {
   gemini: GeminiAPI;
 }
 
-interface ChatMessage {
+const regexArtifact = /<codexaArtifact\s+(?:title|id)="([^"]+)"\s+(?:id|title)="([^"]+)">([\s\S]*?)<\/codexaArtifact>/g;
+
+export interface ChatMessage {
   sender: "user" | "AI";
   text: string;
+  type: "chat" | 'shell';
 }
 
-const App: React.FC<AppProps> = ({ gemini }) => {
+const App: React.FC = () => {
   const [collapse, setCollapse] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]); // State for tracking chat messages
@@ -29,6 +33,8 @@ const App: React.FC<AppProps> = ({ gemini }) => {
   const geminiOuput = useRef<string | null>(null);
   const parseXmlGeminiOuput = useRef<CodexaArtifact[] | null>(null);
   const [transformedXmlData, setTransformedXmlData] = useState<TransformFilesReturnType | null>(null);
+  const [aiCmdLoading, setAiCmdLoading] = useState<boolean>(false)
+  const gemini = useGeminiApi()
 
   const fetchGemini = async (chat: string | undefined) => {
     if (!chat) return;
@@ -41,9 +47,22 @@ const App: React.FC<AppProps> = ({ gemini }) => {
       if (response) {
         const xmlReplaceResponse = response.replace('xml', '');
         geminiOuput.current = xmlReplaceResponse;
-        console.log('parseXmlGeminiOuput', geminiOuput.current)
+        // console.log('xmlReplaceResponse', geminiOuput.current)
+
+        // Perform the replacement
+        const replacedOutput = geminiOuput.current.replace(regexArtifact, '').trim().replace(/markdown Copy copy/g, '');
+
+        // Check if replacement made a difference
+        const finalOutput = replacedOutput.length > 0 ? replacedOutput : geminiOuput.current;
+
+        // console.log("finalOutput", finalOutput)
+        if (finalOutput)
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { sender: "AI", text: finalOutput, type: "chat" }
+        ]);
         parseXmlGeminiOuput.current = parseXML(geminiOuput.current);
-        console.log('parseXmlGeminiOuput', parseXmlGeminiOuput)
+        // console.log('parseXmlGeminiOuput', parseXmlGeminiOuput)
         setTransformedXmlData(transformFiles(parseXmlGeminiOuput.current));
       }
       setLoading(false);
@@ -61,7 +80,7 @@ const App: React.FC<AppProps> = ({ gemini }) => {
     // Add user message to the messages state
     setMessages(prevMessages => [
       ...prevMessages,
-      { sender: "user", text: textAreaValue }
+      { sender: "user", text: textAreaValue, type: "chat" }
     ]);
 
     fetchGemini(textAreaValue);
@@ -124,7 +143,7 @@ const App: React.FC<AppProps> = ({ gemini }) => {
             <div className="flex tablet:w-[45vw] justify-center tablet:mt-24 mt-10 flex-col tablet:px-11 px-2">
               <div className="text-white">
                 <div className=" mb-44">
-                  <Chats messages={messages} />
+                  <Chats messages={messages} aiCmdLoading={aiCmdLoading} />
                 </div>
                 {collapse &&
                   <div className="flex fixed bottom-5 h-32 bg-bg-secondary tablet:w-[38vw] rounded-md z-50 p-2 items-center gap-4 border border-slate-400 w-[95vw]">
@@ -147,6 +166,8 @@ const App: React.FC<AppProps> = ({ gemini }) => {
                 files={transformedXmlData ? transformedXmlData.fileSystemTree : {}}
                 commands={transformedXmlData ? transformedXmlData.shellCommands : null}
                 loading={loading}
+                setMessages={setMessages}
+                setAiCmdLoading={setAiCmdLoading}
               />
 
             </div>

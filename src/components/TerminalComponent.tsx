@@ -1,19 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
+import { ChatMessage } from '../App';
+import { useGeminiApi } from '../hooks/useGeminiApi';
 
 interface TerminalComponentProps {
     webContainerInstance: any;
     commandToExecute?: string[]; // Command to be executed programmatically
+    setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>
+    setAiCmdLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const TerminalComponent: React.FC<TerminalComponentProps> = ({ webContainerInstance, commandToExecute }) => {
+const TerminalComponent: React.FC<TerminalComponentProps> = ({ webContainerInstance, commandToExecute, setMessages, setAiCmdLoading }) => {
     const terminalRef = useRef<HTMLDivElement>(null);
     const terminalInstance = useRef<Terminal | null>(null);
     const fitAddonInstance = useRef<FitAddon | null>(null);
     const processRef = useRef<any>(null); // Keep track of the currently running process
     let currentCommand = ''; // Buffer for the current command
+    const gemini = useGeminiApi()
 
     useEffect(() => {
         if (!terminalRef.current) return;
@@ -30,7 +35,7 @@ const TerminalComponent: React.FC<TerminalComponentProps> = ({ webContainerInsta
             scrollback: 1000,
             fontFamily: 'Fira Code, monospace',
             fontSize: 14,
-            
+
         });
 
         const fitAddon = new FitAddon();
@@ -136,26 +141,43 @@ const TerminalComponent: React.FC<TerminalComponentProps> = ({ webContainerInsta
                 for (const command of commandToExecute) {
                     terminalInstance.current!.writeln(`${command}`);
                     try {
+                        setAiCmdLoading(true)
+                        setMessages(prevMessages => [
+                            ...prevMessages,
+                            { sender: 'AI', text: `Executing: ${command}...`, type: 'shell' }
+                        ])
                         const process = await webContainerInstance.spawn('sh', ['-c', command]);
                         processRef.current = process;
-
+                        let output = ''
                         process.output.pipeTo(
                             new WritableStream({
                                 write(chunk) {
                                     terminalInstance.current!.write(chunk);
+                                    output += chunk
                                 },
                             })
                         );
 
                         const exitCode = await process.exit;
+                        if (exitCode) {
+                            setAiCmdLoading(false)
+                        }
+
+                        if (exitCode != 0) {
+                            // gemini.chat([{ role: 'user', parts: [{ text: `${output} solve this error and again run npm install and script start code`}]}])
+                        }
                         terminalInstance.current!.writeln(`\nProcess exited with code: ${exitCode}`);
                     } catch (error) {
                         const errorMessage = error instanceof Error ? error.message : String(error);
                         terminalInstance.current!.writeln(`\x1b[31mError: ${errorMessage}\x1b[0m`);
+                        setAiCmdLoading(false)
+                        // gemini.chat([{ role: 'user', parts: [{ text: `${errorMessage} solve this error and again run npm install and script start code` }] }])
                     } finally {
                         processRef.current = null;
+                        setAiCmdLoading(false)
                         terminalInstance.current!.write('$ Codexa $ ');
                         terminalInstance.current!.scrollToBottom();
+
                     }
                 }
             };
