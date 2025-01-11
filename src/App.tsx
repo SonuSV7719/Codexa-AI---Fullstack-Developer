@@ -120,14 +120,14 @@ const App: React.FC<AppProps> = ({ gemini }) => {
             Web Container is Loading...<Spinner speed="1s" />
           </div>
         ) : (
-          <div className="">
-            <div className="flex tablet:w-[45vw] justify-center mt-24 flex-col tablet:px-11 px-2">
+          <div className="flex flex-col">
+            <div className="flex tablet:w-[45vw] justify-center tablet:mt-24 mt-10 flex-col tablet:px-11 px-2">
               <div className="text-white">
                 <div className=" mb-44">
                   <Chats messages={messages} />
                 </div>
                 {collapse &&
-                  <div className="flex fixed bottom-5 h-32 bg-bg-secondary tablet:w-[38vw] rounded-md z-50 p-2 items-center gap-4 border border-slate-400">
+                  <div className="flex fixed bottom-5 h-32 bg-bg-secondary tablet:w-[38vw] rounded-md z-50 p-2 items-center gap-4 border border-slate-400 w-[95vw]">
                     <textarea
                       className="w-full p-2 bg-transparent text-white border-none outline-none border-slate-500"
                       placeholder="Type here..."
@@ -140,7 +140,7 @@ const App: React.FC<AppProps> = ({ gemini }) => {
               </div>
             </div>
 
-            <div className="flex items-center text-white tablet:mx-5 mt-2 justify-end tablet:fixed w-full tablet:right-1 tablet:top-[4.5rem]">
+            <div className="flex items-center text-white tablet:mx-5 mt-20 tablet:mt-2 justify-end tablet:fixed w-full tablet:right-1 tablet:top-[4.5rem] flex-1 place-self-start tablet:mb-0 order-[-1] tablet:order-none relative right-2.5">
               <EditorContainer
                 collapse={collapse}
                 setCollapse={setCollapse}
