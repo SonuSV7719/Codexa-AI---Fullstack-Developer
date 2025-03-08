@@ -26,8 +26,7 @@ Codexa AI is designed to assist developers by providing real-time code suggestio
 ## Technologies Used
 
 - **Frontend**: React, TypeScript, Vite, Tailwind CSS
-- **Backend**: Node.js, Express
-- **AI Integration**: OpenAI Codex
+- **AI Integration**: Gemini AI
 
 ## Installation
 
@@ -43,16 +42,10 @@ Codexa AI is designed to assist developers by providing real-time code suggestio
    - For the frontend:
 
      ```bash
-     cd client
      npm install
      ```
 
-   - For the backend:
 
-     ```bash
-     cd server
-     npm install
-     ```
 
 3. **Set Up Environment Variables**:
 
@@ -62,23 +55,14 @@ Codexa AI is designed to assist developers by providing real-time code suggestio
      OPENAI_API_KEY=your_openai_api_key
      ```
 
-## Usage
 
-1. **Run the Backend Server**:
-
-   ```bash
-   cd server
-   npm start
-   ```
-
-2. **Run the Frontend Development Server**:
+4. **Run the Frontend Development Server**:
 
    ```bash
-   cd client
    npm run dev
    ```
 
-3. **Access the Application**:
+5. **Access the Application**:
 
    Navigate to `http://localhost:3000` in your web browser to start using Codexa AI.
 
