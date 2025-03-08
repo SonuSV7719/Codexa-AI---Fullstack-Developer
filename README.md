@@ -52,7 +52,7 @@ Codexa AI is designed to assist developers by providing real-time code suggestio
    - Create a `.env` file in the `server` directory and add your OpenAI API key:
 
      ```env
-     OPENAI_API_KEY=your_openai_api_key
+     VITE_GEMINI_API_KEY=VITE_GEMINI_API_KEY
      ```
 
 
