@@ -36,3 +36,66 @@ Codexa AI is designed to assist developers by providing real-time code suggestio
    ```bash
    git clone https://github.com/SonuSV7719/Codexa-AI---Fullstack-Developer.git
    cd Codexa-AI---Fullstack-Developer
+   ```
+
+2. **Install Dependencies**:
+
+   - For the frontend:
+
+     ```bash
+     cd client
+     npm install
+     ```
+
+   - For the backend:
+
+     ```bash
+     cd server
+     npm install
+     ```
+
+3. **Set Up Environment Variables**:
+
+   - Create a `.env` file in the `server` directory and add your OpenAI API key:
+
+     ```env
+     OPENAI_API_KEY=your_openai_api_key
+     ```
+
+## Usage
+
+1. **Run the Backend Server**:
+
+   ```bash
+   cd server
+   npm start
+   ```
+
+2. **Run the Frontend Development Server**:
+
+   ```bash
+   cd client
+   npm run dev
+   ```
+
+3. **Access the Application**:
+
+   Navigate to `http://localhost:3000` in your web browser to start using Codexa AI.
+
+## Contributing
+
+We welcome contributions from the community. To contribute:
+
+1. **Fork the Repository**: Click the 'Fork' button at the top right of this page.
+2. **Create a New Branch**: Use `git checkout -b feature-branch-name`.
+3. **Commit Your Changes**: Use `git commit -m 'Description of your feature'`.
+4. **Push to Your Fork**: Use `git push origin feature-branch-name`.
+5. **Submit a Pull Request**: Navigate to the original repository and click 'New Pull Request'.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+*Note: This project is inspired by various AI coding assistants and aims to provide an open-source solution tailored for full-stack developers.*
