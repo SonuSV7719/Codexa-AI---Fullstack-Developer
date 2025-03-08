@@ -1,51 +1,38 @@
-# React + TypeScript + Vite
+# Codexa AI - Fullstack Developer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Codexa AI - Fullstack Developer repository. This project aims to develop an AI-powered coding assistant integrated into a full-stack development environment, leveraging modern technologies to enhance coding efficiency and accuracy.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Expanding the ESLint configuration
+## Project Overview
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Codexa AI is designed to assist developers by providing real-time code suggestions, error detection, and code optimization tips. By integrating AI capabilities into the development workflow, Codexa AI aims to streamline coding tasks and reduce the time spent on debugging and code reviews.
 
-- Configure the top-level `parserOptions` property like this:
+## Features
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Real-time Code Suggestions**: Offers intelligent code completions to speed up development.
+- **Error Detection**: Identifies potential errors and provides solutions before code execution.
+- **Code Optimization**: Suggests improvements for better performance and readability.
+- **Seamless Integration**: Easily integrates with popular code editors and IDEs.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Technologies Used
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS
+- **Backend**: Node.js, Express
+- **AI Integration**: OpenAI Codex
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-# Codexa-AI---Fullstack-Developer
+## Installation
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/SonuSV7719/Codexa-AI---Fullstack-Developer.git
+   cd Codexa-AI---Fullstack-Developer
